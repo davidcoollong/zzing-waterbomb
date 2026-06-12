@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WATERBOMB 공식 워터건 단독 할인판매 — ZZING</title>
+<meta name="description" content="워터밤 공식 라이선스 워터건 단독 할인판매. 정가 35,000원 → 21,000원. 선착순 한정, 고글+방수백 무상증정." />
+<meta property="og:title" content="WATERBOMB 공식 워터건 단독 할인! 35,000원 → 21,000원" />
+<meta property="og:description" content="선착순 한정판매 · 워터건 구매 시 고글 + 방수백 무상증정" />
+<meta property="og:image" content="img/shotgun_main.jpeg" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root {
+    --green: #2ECC1E; --green-deep: #1a9a10; --pink: #FF2C86; --pink-deep: #d61a6b;
+    --ink: #111; --ink2: #555; --paper: #fff; --red: #FF2D2D; --yellow: #FFE600;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Pretendard", -apple-system, sans-serif; color: var(--ink); background: #fff; word-break: keep-all; }
+  img { max-width: 100%; display: block; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+  /* ── 인플루언서 전용 배너 ── */
+  #inf-bar {
+    position: sticky; top: 0; z-index: 999;
+    background: var(--yellow);
+    color: #111; text-align: center; padding: 18px 16px;
+    font-size: clamp(16px, 4.5vw, 21px); font-weight: 900; letter-spacing: .01em;
+    border-bottom: 4px solid #111; box-shadow: 0 4px 14px rgba(0,0,0,.2);
+  }
+  #inf-bar b {
+    color: #fff; background: var(--pink); font-size: 1.15em;
+    padding: 2px 10px; border-radius: 8px; margin: 0 2px;
+  }
+
+  /* ── 메인 프로모션 히어로 (WATERBOMB 브랜드 스타일) ── */
+  .hero {
+    position: relative; overflow: hidden;
+    background: radial-gradient(circle at 18% 22%, #aef05a 0%, transparent 38%),
+                radial-gradient(circle at 85% 12%, #ffe600 0%, transparent 30%),
+                radial-gradient(circle at 80% 85%, #19b50f 0%, transparent 45%),
+                linear-gradient(135deg, #43d92e 0%, #2ECC1E 55%, #6fe04a 100%);
+    color: #fff; text-align: center; padding: 34px 16px 36px;
+  }
+  .hero::before, .hero::after {
+    content: ""; position: absolute; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle at 32% 30%, #b9f57a, #2db31c 70%);
+    box-shadow: inset -14px -18px 30px rgba(0,80,0,.35);
+  }
+  .hero::before { width: 130px; height: 130px; left: -40px; bottom: -30px; }
+  .hero::after { width: 90px; height: 90px; right: -25px; top: 22%; background: radial-gradient(circle at 32% 30%, #fff7a8, #f5d400 70%); }
+  .wb-logo {
+    display: inline-block; border: 4px solid #fff; padding: 6px 18px;
+    font-family: "Pretendard", sans-serif;
+    font-size: clamp(20px, 5.5vw, 30px); letter-spacing: .04em; color: #fff;
+    text-shadow: 2px 2px 0 rgba(0,0,0,.18); margin-bottom: 16px;
+  }
+  .hero .badge {
+    display: inline-block; background: var(--red); color: #fff;
+    font-size: clamp(17px, 4.5vw, 24px); font-weight: 900; letter-spacing: .02em;
+    padding: 10px 26px; border-radius: 40px; box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    animation: pulse 1.6s infinite; position: relative; z-index: 1;
+  }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+  .hero h1 {
+    font-family: "Pretendard", sans-serif;
+    font-size: clamp(28px, 7.5vw, 48px); font-weight: 900; line-height: 1.3; margin-top: 18px;
+    text-shadow: 3px 3px 0 rgba(0,60,0,.25); position: relative; z-index: 1;
+  }
+  .hero h1 .hl {
+    display: inline-block; background: var(--yellow); color: #111; padding: 4px 16px;
+    border-radius: 10px; box-shadow: 4px 4px 0 rgba(0,60,0,.3); text-shadow: none; margin-top: 8px;
+  }
+  .off40 {
+    display: inline-block; background: var(--red); color: #fff;
+    font-size: .6em; font-weight: 900; padding: 4px 12px; border-radius: 30px;
+    vertical-align: middle; box-shadow: 2px 2px 0 rgba(0,60,0,.3);
+  }
+  .hero .gift {
+    margin: 22px auto 0; max-width: 600px; background: #fff; color: #111;
+    border: 4px solid var(--pink); border-radius: 18px; padding: 20px 22px;
+    font-size: clamp(17px, 5vw, 23px); font-weight: 900; line-height: 1.7;
+    box-shadow: 0 6px 22px rgba(0,0,0,.18);
+  }
+  .hero .gift .pin { color: #fff; background: var(--pink); padding: 1px 8px; border-radius: 7px; }
+
+  /* ── 가격 표시 ── */
+  .pricebox { text-align: center; margin: 14px 0 6px; }
+  .price-was { font-size: clamp(20px, 5.5vw, 26px); color: #999; text-decoration: line-through; font-weight: 700; }
+  .price-now { font-size: clamp(44px, 12vw, 64px); font-weight: 900; color: var(--red); margin-left: 10px; letter-spacing: -.01em; }
+  .price-now small { font-size: .45em; font-weight: 900; }
+  .price-off {
+    display:inline-block; background: var(--red); color:#fff; font-weight:900;
+    font-size:20px; border-radius:50px; padding: 8px 16px; margin-left:8px;
+    vertical-align: middle; animation: pulse 1.6s infinite;
+  }
+
+  /* ── 스타 라인업 / 워터밤 현장 ── */
+  .stars { background: #0c0c0c; color: #fff; text-align: center; padding: 42px 16px 46px; }
+  .stars .eyebrow { font-size: 13px; font-weight: 800; letter-spacing: .22em; color: var(--green); }
+  .stars h2 { font-size: clamp(22px, 6vw, 34px); font-weight: 900; line-height: 1.4; margin-top: 10px; }
+  .stars h2 .y { color: var(--yellow); }
+  .stars p.sub { font-size: 15px; color: #bbb; line-height: 1.7; max-width: 560px; margin: 12px auto 22px; }
+  .stars .sgrid { display: grid; gap: 12px; max-width: 760px; margin: 0 auto; }
+  .stars .sgrid img, .stars .sgrid video { width: 100%; border-radius: 16px; display: block; }
+  .stars .vbox { position: relative; border-radius: 16px; overflow: hidden; }
+  .stars .vtag {
+    position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,.65); color: #fff;
+    font-size: 12px; font-weight: 800; letter-spacing: .08em; padding: 5px 12px; border-radius: 30px;
+  }
+
+  /* ── 제품 카드 (상단 / WATERBOMB 카드 스타일) ── */
+  .products { padding: 36px 0 10px; }
+  .pcard {
+    border-radius: 24px; overflow: hidden; margin-bottom: 32px;
+    background: linear-gradient(150deg, #3edb2e, #aef05a 50%, #2ECC1E);
+    padding: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  }
+  .pcard.snap { background: linear-gradient(150deg, #FF2C86, #ff8ec0 50%, #FF2C86); }
+  .pcard .inner { background: #fff; border-radius: 18px; overflow: hidden; }
+  .pcard .imgs { display: grid; grid-template-columns: 1fr 1fr; background: #f7f7f7; position: relative; }
+  .pcard .imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .pcard .imgs .pill {
+    position: absolute; bottom: 10px; background: #fff; color: #111;
+    font-size: 13px; font-weight: 800; padding: 4px 14px; border-radius: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  }
+  .pcard .imgs .pill.l { left: 12px; } .pcard .imgs .pill.r { right: 12px; }
+  .pcard .strip {
+    background: #fff; border-top: 3px solid #111; text-align: center;
+    font-family: "Pretendard", sans-serif;
+    font-size: clamp(13px, 3.6vw, 17px); letter-spacing: .05em; padding: 10px 8px; color: #111;
+  }
+  .pcard .strip .thin { color: var(--green-deep); }
+  .pcard.snap .strip .thin { color: var(--pink-deep); }
+  .pcard .body { padding: 22px 20px 26px; text-align: center; background:#fff; }
+  .pcard h2 { font-size: clamp(22px, 6vw, 30px); font-weight: 900; }
+  .pcard .en {
+    display: inline-block; font-family: "Pretendard", sans-serif;
+    font-size: 14px; letter-spacing: .1em; background: #111; color: #fff;
+    padding: 4px 14px; border-radius: 6px; margin-bottom: 8px;
+  }
+  .pcard .colors { font-size: 14px; color: var(--ink2); margin-top: 6px; font-weight: 600; }
+  .btn-buy {
+    display: block; width: 100%; max-width: 420px; margin: 14px auto 0;
+    background: var(--green); color: #fff; text-decoration: none;
+    font-size: 18px; font-weight: 900; padding: 17px 20px; border-radius: 50px;
+    box-shadow: 0 5px 18px rgba(46,204,30,.4);
+  }
+  .pcard.snap .btn-buy { background: var(--pink); box-shadow: 0 5px 18px rgba(255,44,134,.4); }
+  .btn-buy:active { transform: scale(.98); }
+  .soldnote { font-size: 13px; color: var(--ink2); margin-top: 10px; }
+
+  /* ── 증정 안내 ── */
+  .gifts { background: #FFF8DC; border-radius: 20px; padding: 26px 22px; margin: 8px 0 30px; }
+  .gifts h3 { font-size: 20px; font-weight: 900; text-align: center; }
+  .gifts ul { list-style: none; margin-top: 14px; }
+  .gifts li { font-size: 15px; font-weight: 600; line-height: 1.6; padding: 6px 0 6px 30px; position: relative; }
+  .gifts li::before { content: "🎁"; position: absolute; left: 0; }
+
+  /* ── 제품 설명 (하단) ── */
+  .desc { padding: 16px 0 50px; }
+  .desc h3 { font-size: 22px; font-weight: 900; text-align: center; margin: 34px 0 16px; }
+  .desc p { font-size: 15px; line-height: 1.75; color: var(--ink2); text-align: center; max-width: 620px; margin: 0 auto 14px; }
+  .desc img { border-radius: 16px; margin: 12px auto; }
+  .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 18px; }
+  .specs .s { background: #f6f6f6; border-radius: 14px; text-align: center; padding: 16px 8px; }
+  .specs .v { font-size: 20px; font-weight: 900; }
+  .specs .k { font-size: 12px; color: var(--ink2); margin-top: 4px; font-weight: 600; }
+
+  /* ── 상세 스펙 (블랙 섹션) ── */
+  .detail-dark { background: #0c0c0c; color: #fff; border-radius: 22px; padding: 34px 22px; margin: 26px 0; }
+  .detail-dark .dd-head { text-align: center; font-size: clamp(20px, 5.5vw, 27px); font-weight: 900; line-height: 1.5; }
+  .detail-dark .dd-head .g { color: var(--green); }
+  .detail-dark .dd-head .p { color: var(--pink); }
+  .detail-dark .dd-head .y { color: var(--yellow); }
+  .feat-list { margin-top: 24px; display: grid; gap: 14px; }
+  .feat-item { background: #1a1a1a; border-radius: 16px; padding: 18px 20px; }
+  .feat-item .t { font-size: 17px; font-weight: 900; }
+  .feat-item .t .tag { font-size: 12px; font-weight: 800; border-radius: 6px; padding: 2px 8px; margin-right: 8px; vertical-align: middle; }
+  .feat-item.green .t .tag { background: var(--green); color: #06270D; }
+  .feat-item.pink .t .tag { background: var(--pink); color: #fff; }
+  .feat-item .d { font-size: 14px; color: #bbb; line-height: 1.7; margin-top: 6px; }
+
+  footer { background: #111; color: #aaa; text-align: center; font-size: 12px; line-height: 1.8; padding: 26px 16px; }
+</style>
+</head>
+<body>
+
+<div id="inf-bar" style="display:none"></div>
+
+<header class="hero">
+  <div class="wb-logo">WATERBOMB</div><br/>
+  <span class="badge">단독 할인판매! 선착순 한정판매</span>
+  <h1>WATERBOMB 공식 워터건<br/><span class="hl">정가 <s style="opacity:.55">35,000원</s> → 21,000원 <span class="off40">40%↓</span></span></h1>
+  <div class="gift">
+    🎁 워터건 1개 구매 시 <span class="pin">고글 1개 무상증정</span> (선착순 8,000개)<br/>
+    🎁 워터건을 담는 <span class="pin">방수백(타포린백·월드투어백) 랜덤 무상증정</span>
+  </div>
+</header>
+
+<section class="stars">
+  <div class="eyebrow">WATERBOMB STAR LINEUP</div>
+  <h2>아티스트들이 직접 들었던<br/><span class="y">바로 그 공식 워터건</span> 🔫</h2>
+  <p class="sub">강다니엘 · 나연 · 화사 · STAYC · 백호 · 사이먼도미닉, 그리고 라이언 레이놀즈 &amp; 휴 잭맨까지 —
+    워터밤 무대와 챌린지에서 아티스트들이 손에 든 공식 워터건을 그대로 만나보세요.</p>
+  <div class="sgrid">
+    <div class="vbox">
+      <video src="img/tour.mp4" muted playsinline autoplay loop preload="metadata"></video>
+      <span class="vtag">▶ WATERBOMB TOUR</span>
+    </div>
+    <img src="img/stars_1.jpg" alt="워터밤 스타 라인업 1" loading="lazy" />
+    <img src="img/stars_2.jpg" alt="워터밤 스타 라인업 2" loading="lazy" />
+    <img src="img/stars_3.jpg" alt="워터밤 스타 라인업 3" loading="lazy" />
+    <img src="img/festival_1.jpg" alt="워터밤 페스티벌 현장" loading="lazy" />
+  </div>
+</section>
+
+<main class="wrap">
+  <section class="products">
+
+    <div class="pcard" id="shotgun">
+      <div class="inner">
+      <div class="imgs">
+        <img src="img/shotgun_main.jpeg" alt="워터쿨 샷건 그린" />
+        <img src="img/shotgun_yellow.jpeg" alt="워터쿨 샷건 옐로우" />
+        <span class="pill l">Green</span><span class="pill r">Yellow</span>
+      </div>
+      <div class="strip">WATERBOMB 2026 <span class="thin">WATERCOOL SHOTGUN</span></div>
+      <div class="body">
+        <div class="en">WATERCOOL SHOTGUN</div>
+        <h2>워터쿨 샷건</h2>
+        <div class="colors">컬러: 옐로우 / 그린 · 가압식 강력 분사 · LED 라이트볼 2개 포함</div>
+        <div class="pricebox">
+          <span class="price-was">35,000원</span>
+          <span class="price-now">21,000<small>원</small></span>
+          <span class="price-off">-40%</span>
+        </div>
+        <a class="btn-buy" data-handle="watercool-shotgun" href="#">🛒 샷건 구매하기 — 21,000원</a>
+        <div class="soldnote">⏰ 선착순 한정수량 · 소진 시 조기 종료됩니다</div>
+      </div>
+      </div>
+    </div>
+
+    <div class="pcard snap" id="snapgun">
+      <div class="inner">
+      <div class="imgs">
+        <img src="img/snapgun_main.jpeg" alt="워터쿨 스냅건 핑크" />
+        <img src="img/snapgun_green.jpeg" alt="워터쿨 스냅건 그린" />
+        <span class="pill l">Pink</span><span class="pill r">Green</span>
+      </div>
+      <div class="strip">WATERBOMB 2026 <span class="thin">WATERCOOL SNAPGUN</span></div>
+      <div class="body">
+        <div class="en">WATERCOOL SNAPGUN</div>
+        <h2>워터쿨 스냅건</h2>
+        <div class="colors">컬러: 핑크 / 그린 · 자동 연사 · LED 스틱 + 1L 워터백 포함</div>
+        <div class="pricebox">
+          <span class="price-was">35,000원</span>
+          <span class="price-now">21,000<small>원</small></span>
+          <span class="price-off">-40%</span>
+        </div>
+        <a class="btn-buy" data-handle="watercool-snapgun" href="#">🛒 스냅건 구매하기 — 21,000원</a>
+        <div class="soldnote">⏰ 선착순 한정수량 · 소진 시 조기 종료됩니다</div>
+      </div>
+      </div>
+    </div>
+
+    <div class="gifts">
+      <h3>🎁 무상증정 혜택 안내</h3>
+      <ul>
+        <li><b>고글 1개</b> — 워터건 1개 구매 당 1개 증정 (정가 10,000원 / 선착순 8,000개 한정)</li>
+        <li><b>방수백 랜덤 증정</b> — 워터건을 담을 수 있는 타포린백 또는 KREAM 월드투어백 랜덤 제공</li>
+        <li>세트 판매 없이 <b>전 제품 단품 구매 가능</b> · 비치타올은 별도 판매</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="desc">
+    <h3>제품 상세 설명</h3>
+
+    <div class="detail-dark">
+      <div class="dd-head">2026년, <span class="y">가장 핫한 워터밤</span>을<br/>업그레이드 해서 돌아온 <span class="g">공식 워터건</span> 💦</div>
+      <div class="feat-list">
+        <div class="feat-item pink">
+          <div class="t"><span class="tag">SNAPGUN</span>물줄기와 함께 발사되는 LED 레이저</div>
+          <div class="d">전면 LED 스틱이 물줄기와 함께 빛을 발사해 밤에도 화려하게 빛납니다. 나이트 페스티벌의 필수템.</div>
+        </div>
+        <div class="feat-item pink">
+          <div class="t"><span class="tag">SNAPGUN</span>멈추지 않는 자동 연사 모드</div>
+          <div class="d">LED 스틱과 수공간이 합쳐진 디자인. 방아쇠를 당기고 있는 동안 끊김 없이 연사되는 자동 발사 방식으로 시원하게 즐기세요.</div>
+        </div>
+        <div class="feat-item pink">
+          <div class="t"><span class="tag">SNAPGUN</span>1L 대용량 워터백</div>
+          <div class="d">탈부착형 1L 워터백으로 충전 횟수 걱정 없이 오래 즐길 수 있습니다. 핑크 / 그린 2가지 컬러.</div>
+        </div>
+        <div class="feat-item green">
+          <div class="t"><span class="tag">SHOTGUN</span>가압 펌핑식 초강력 분사</div>
+          <div class="d">펌핑으로 압력을 모아 한 번에 강력한 물줄기를 발사합니다. 사거리와 수압 모두 압도적인 메인 워터건. 옐로우 / 그린 2가지 컬러.</div>
+        </div>
+        <div class="feat-item green">
+          <div class="t"><span class="tag">SHOTGUN</span>LED 라이트볼 + 시그니처 스트랩</div>
+          <div class="d">물탱크에 LED 라이트볼 2개를 넣으면 흔들릴 때마다 반짝이는 불빛 연출. 시그니처 스트랩으로 어깨에 메고 자유롭게 이동하세요.</div>
+        </div>
+        <div class="feat-item green">
+          <div class="t"><span class="tag">COMMON</span>워터밤 공식 라이선스 정품</div>
+          <div class="d">아티스트들이 무대에서 직접 사용한 바로 그 공식 워터건. KC 안전확인 신고필 · 8세 이상 사용 가능.</div>
+        </div>
+      </div>
+    </div>
+
+    <p><b>워터쿨 샷건</b> — 가압식 펌핑으로 강력한 물줄기를 발사하는 워터밤 공식 라이선스 워터건. 시그니처 스트랩과 LED 라이트볼 2개가 포함되어 물탱크 속에서 반짝이는 불빛을 즐길 수 있습니다.</p>
+    <img src="img/shotgun_set.jpeg" alt="샷건 세트 구성" />
+    <img src="img/shotgun_detail.jpeg" alt="샷건 디테일" />
+    <p style="margin-top:30px"><b>워터쿨 스냅건</b> — 멈추지 않는 자동 연사 방식의 워터건. 전면 LED 스틱에서 물줄기와 함께 불빛이 발사되어 밤에도 화려하게 빛납니다. 1L 대용량 워터백 포함.</p>
+    <img src="img/snapgun_set.jpeg" alt="스냅건 세트 구성" />
+    <img src="img/snapgun_detail.jpeg" alt="스냅건 디테일" />
+    <div class="specs">
+      <div class="s"><div class="v">2종</div><div class="k">샷건 · 스냅건</div></div>
+      <div class="s"><div class="v">LED</div><div class="k">발광 기능 탑재</div></div>
+      <div class="s"><div class="v">KC</div><div class="k">안전확인 신고필</div></div>
+    </div>
+    <img src="img/brand_poster.jpeg" alt="워터밤 공식 굿즈" style="margin-top:26px" />
+    <img src="img/lifestyle_1.jpeg" alt="워터건 실착 컷 1" />
+    <img src="img/lifestyle_2.jpeg" alt="워터건 실착 컷 2" />
+  </section>
+</main>
+
+<footer>
+  © WATERBOMB OFFICIAL GOODS · 판매: 주식회사 아크 (ZZING)<br/>
+  워터쿨 샷건 · 스냅건 / MADE IN CHINA / 8세 이상 사용 · KC 안전확인 신고필
+</footer>
+
+<script src="influencers.js"></script>
+<script>
+(function () {
+  /* ── 인플루언서 식별 (?ref=) + localStorage 유지 ── */
+  var params = new URLSearchParams(location.search);
+  var ref = params.get("ref") || localStorage.getItem("zzing_ref") || "";
+  if (ref) localStorage.setItem("zzing_ref", ref);
+
+  var table = window.ZZ_INFLUENCERS || {};
+  var inf = table[ref];
+  var bar = document.getElementById("inf-bar");
+  if (inf) {
+    var nm = inf.name || ("인플루언서 " + ref.replace(/^inf/, "").replace(/^test/, "테스트"));
+    bar.innerHTML = '본 페이지는 <b>' + nm + '</b> 님의 전용 판매 링크입니다 ✨';
+    bar.style.display = "block";
+  }
+
+  /* ── 구매 버튼: Shopify 상품 페이지로 UTM 자동 삽입 ── */
+  var store = window.ZZ_STORE || "https://zzinglebell.com";
+  document.querySelectorAll(".btn-buy").forEach(function (a) {
+    var handle = a.dataset.handle;
+    var url = store + "/products/" + handle;
+    if (ref) {
+      url += "?" + new URLSearchParams({
+        utm_source: "influencer", utm_medium: "social",
+        utm_campaign: ref, utm_content: handle, ref: ref
+      }).toString();
+    }
+    a.href = url;
+  });
+})();
+</script>
+</body>
+</html>

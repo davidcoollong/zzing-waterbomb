@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZZING 인플루언서 링크 관리 (50명)</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Pretendard",sans-serif; background:#f5f5f7; color:#111; padding:30px 16px; }
+  .wrap { max-width:980px; margin:0 auto; }
+  h1 { font-size:24px; font-weight:900; }
+  p.note { font-size:14px; color:#666; margin:10px 0 20px; line-height:1.6; }
+  .tools { margin-bottom:14px; display:flex; gap:10px; flex-wrap:wrap; }
+  button { font-family:inherit; font-size:14px; font-weight:700; border:none; border-radius:8px; padding:10px 16px; cursor:pointer; }
+  .b-green { background:#2ECC1E; color:#fff; }
+  .b-dark { background:#111; color:#fff; }
+  table { width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:10px 12px; border-bottom:1px solid #eee; text-align:left; vertical-align:middle; }
+  th { background:#111; color:#fff; font-size:13px; }
+  td input { font-family:inherit; font-size:14px; padding:6px 8px; border:1px solid #ddd; border-radius:6px; width:140px; }
+  td .url { font-size:12px; color:#555; word-break:break-all; }
+  .copy { background:#eee; font-size:12px; padding:6px 10px; }
+  .copy.ok { background:#2ECC1E; color:#fff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ZZING 인플루언서 링크 관리 — 50명</h1>
+  <p class="note">
+    · 이름 칸에 인플루언서 이름을 입력하면 <b>이 브라우저에 자동 저장</b>되고, 판매페이지 배너에 표시할 이름이 됩니다.<br/>
+    · 입력 후 <b>"influencers.js 다운로드"</b>를 눌러 받은 파일을 기존 influencers.js에 덮어쓰면 실제 판매페이지에 반영됩니다.<br/>
+    · "복사" 버튼으로 각 인플루언서에게 전달할 링크를 복사하세요. CSV로 전체 명단을 내려받을 수도 있습니다.
+  </p>
+  <div class="tools">
+    <button class="b-green" onclick="downloadJS()">⬇ influencers.js 다운로드 (이름 반영)</button>
+    <button class="b-dark" onclick="downloadCSV()">⬇ 전체 링크 CSV 다운로드</button>
+  </div>
+  <table id="tbl">
+    <thead><tr><th>#</th><th>코드</th><th>이름</th><th>전용 링크</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="influencers.js"></script>
+<script>
+  var BASE = location.origin + location.pathname.replace(/admin\.html$/, "");
+  var data = window.ZZ_INFLUENCERS || {};
+  var ids = Object.keys(data).filter(function(k){ return /^inf/.test(k); });
+
+  /* 브라우저 저장분 복원 */
+  var saved = JSON.parse(localStorage.getItem("zz_names") || "{}");
+  ids.forEach(function(id){ if (saved[id]) data[id].name = saved[id]; });
+
+  var tbody = document.querySelector("#tbl tbody");
+  ids.forEach(function (id, i) {
+    var url = BASE + "?ref=" + id;
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      "<td>" + (i+1) + "</td><td><b>" + id + "</b></td>" +
+      '<td><input data-id="' + id + '" value="' + (data[id].name || "") + '" placeholder="이름 입력" /></td>' +
+      '<td class="url">' + url + "</td>" +
+      '<td><button class="copy" data-url="' + url + '">복사</button></td>';
+    tbody.appendChild(tr);
+  });
+
+  tbody.addEventListener("input", function (e) {
+    if (e.target.tagName !== "INPUT") return;
+    saved[e.target.dataset.id] = e.target.value.trim();
+    localStorage.setItem("zz_names", JSON.stringify(saved));
+    data[e.target.dataset.id].name = e.target.value.trim();
+  });
+
+  tbody.addEventListener("click", function (e) {
+    if (!e.target.dataset.url) return;
+    navigator.clipboard.writeText(e.target.dataset.url).then(function () {
+      e.target.classList.add("ok"); e.target.textContent = "완료!";
+      setTimeout(function(){ e.target.classList.remove("ok"); e.target.textContent = "복사"; }, 1200);
+    });
+  });
+
+  function esc(s){ return (s||"").replace(/\\/g,"\\\\").replace(/"/g,'\\"'); }
+
+  function downloadJS() {
+    var lines = ids.map(function(id){ return '  ' + id + ': { name: "' + esc(data[id].name) + '" },'; });
+    var js = "/* ZZING 인플루언서 명단 (관리 페이지에서 생성됨) */\n" +
+      "window.ZZ_INFLUENCERS = {\n" + lines.join("\n") +
+      '\n  test01: { name: "테스트01" }, test02: { name: "테스트02" }, test03: { name: "테스트03" },\n};\n' +
+      'window.ZZ_STORE = "' + (window.ZZ_STORE || "https://zzinglebell.com") + '";\n';
+    save("influencers.js", js, "text/javascript");
+  }
+
+  function downloadCSV() {
+    var rows = [["번호","코드","이름","전용링크","UTM캠페인(Shopify 보고서 기준)"]];
+    ids.forEach(function(id, i){ rows.push([i+1, id, data[id].name || "", BASE + "?ref=" + id, id]); });
+    var csv = "﻿" + rows.map(function(r){ return r.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(","); }).join("\n");
+    save("zzing_influencer_links.csv", csv, "text/csv");
+  }
+
+  function save(name, content, type) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([content], { type: type }));
+    a.download = name; a.click();
+  }
+</script>
+</body>
+</html>
