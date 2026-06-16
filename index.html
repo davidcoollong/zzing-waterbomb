@@ -330,8 +330,28 @@
 </main>
 
 <footer>
-  © WATERBOMB OFFICIAL GOODS · 판매: 주식회사 아크 (ZZING)<br/>
-  워터쿨 샷건 · 스냅건 / MADE IN CHINA / 8세 이상 사용 · KC 안전확인 신고필
+  <div style="max-width:700px;margin:0 auto;text-align:left;line-height:2">
+    <div style="display:flex;flex-wrap:wrap;gap:4px 24px;font-size:11px;color:#666;margin-bottom:10px;justify-content:center">
+      <span><b style="color:#aaa">상호</b> 주식회사 아크</span>
+      <span><b style="color:#aaa">대표이사</b> 김소영</span>
+      <span><b style="color:#aaa">사업자등록번호</b> 460-81-03682</span>
+      <span><b style="color:#aaa">통신판매업신고</b> 2026-서울마포-1476</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px 24px;font-size:11px;color:#666;margin-bottom:10px;justify-content:center">
+      <span><b style="color:#aaa">주소</b> 서울특별시 마포구 성미산로29길 39, 4층</span>
+      <span><b style="color:#aaa">고객센터</b> 010-9801-0800</span>
+      <span><b style="color:#aaa">이메일</b> david.coollong@gmail.com</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px 24px;font-size:11px;color:#666;margin-bottom:14px;justify-content:center">
+      <span><b style="color:#aaa">개인정보보호책임자</b> 김소영 대표이사</span>
+      <span><b style="color:#aaa">법인등록번호</b> 110111-9051577</span>
+    </div>
+    <div style="text-align:center;font-size:11px;color:#555;border-top:1px solid #222;padding-top:12px">
+      © WATERBOMB OFFICIAL GOODS · 판매: 주식회사 아크 (ZZING)<br/>
+      워터쿨 샷건 · 스냅건 / MADE IN CHINA / 8세 이상 사용 · KC 안전확인 신고필<br/>
+      본 쇼핑몰은 전자상거래 등에서의 소비자보호에 관한 법률을 준수합니다.
+    </div>
+  </div>
 </footer>
 
 <script src="influencers.js"></script>
@@ -345,10 +365,19 @@
   var table = window.ZZ_INFLUENCERS || {};
   var inf = table[ref];
   var bar = document.getElementById("inf-bar");
-  if (inf) {
-    var nm = inf.name || ("인플루언서 " + ref.replace(/^inf/, "").replace(/^test/, "테스트"));
-    bar.innerHTML = '본 페이지는 <b>' + nm + '</b> 님의 전용 판매 링크입니다 ✨';
+  function showBar(name) {
+    bar.innerHTML = '본 페이지는 <b>' + name + '</b> 님의 전용 판매 링크입니다 ✨';
     bar.style.display = "block";
+  }
+  if (inf) {
+    showBar(inf.name || ("인플루언서 " + ref.replace(/^inf/, "").replace(/^test/, "테스트")));
+  }
+  /* 관리자 서버에서 최신 이름 실시간 반영 */
+  if (ref && window.ZZ_API) {
+    fetch(window.ZZ_API + "/api/public-names")
+      .then(function (r) { return r.json(); })
+      .then(function (names) { if (names[ref]) showBar(names[ref]); })
+      .catch(function () {});
   }
 
   /* ── 구매 버튼: Shopify 상품 페이지로 UTM 자동 삽입 ── */
