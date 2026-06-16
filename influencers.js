@@ -20,3 +20,6 @@ window.ZZ_INFLUENCERS = {
 
 /* 스토어 도메인 — Shopify 연결 도메인 */
 window.ZZ_STORE = "https://zzinglebell.com";
+
+/* 관리자 서버 API — 배포 후 주소 입력 (이름 실시간 연동) */
+window.ZZ_API = "https://zzing-admin.david-coollong.workers.dev";
