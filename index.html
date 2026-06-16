@@ -380,18 +380,48 @@
       .catch(function () {});
   }
 
-  /* ── 구매 버튼: Shopify 상품 페이지로 UTM 자동 삽입 ── */
+  /* ── 구매 버튼: 장바구니 추가 후 바로 결제창 직행 ── */
   var store = window.ZZ_STORE || "https://zzinglebell.com";
+  var VARIANTS = {
+    "watercool-shotgun": 50837984051447,
+    "watercool-snapgun": 50837984116983
+  };
+
   document.querySelectorAll(".btn-buy").forEach(function (a) {
-    var handle = a.dataset.handle;
-    var url = store + "/products/" + handle;
-    if (ref) {
-      url += "?" + new URLSearchParams({
-        utm_source: "influencer", utm_medium: "social",
-        utm_campaign: ref, utm_content: handle, ref: ref
-      }).toString();
-    }
-    a.href = url;
+    a.href = "#";
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      var handle = a.dataset.handle;
+      var variantId = VARIANTS[handle];
+      if (!variantId) return;
+
+      var btn = a;
+      btn.textContent = "처리 중...";
+      btn.style.opacity = "0.7";
+      btn.style.pointerEvents = "none";
+
+      fetch(store + "/cart/add.js", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: variantId, quantity: 1 })
+      })
+      .then(function () {
+        var params = new URLSearchParams({
+          utm_source: "influencer", utm_medium: "social",
+          utm_campaign: ref || "direct", utm_content: handle, ref: ref || ""
+        }).toString();
+        window.location.href = store + "/checkout?" + params;
+      })
+      .catch(function () {
+        /* CORS 차단 시 직접 cart URL로 이동 */
+        var params = new URLSearchParams({
+          utm_source: "influencer", utm_medium: "social",
+          utm_campaign: ref || "direct", utm_content: handle, ref: ref || ""
+        }).toString();
+        window.location.href = store + "/cart/" + variantId + ":1?" + params;
+      });
+    });
   });
 })();
 </script>
