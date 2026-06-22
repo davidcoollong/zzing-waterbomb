@@ -9,7 +9,7 @@
 <meta property="og:description" content="선착순 한정판매 · 워터건 구매 시 고글 + 방수백 무상증정" />
 <meta property="og:image" content="img/shotgun_main.jpeg" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<script src="https://cdn.portone.io/v2/browser-sdk.umd.min.js"></script>
 <style>
   :root {
     --green: #2ECC1E; --green-deep: #1a9a10; --pink: #FF2C86; --pink-deep: #d61a6b;
@@ -492,24 +492,29 @@
     var merchantUid = 'zzing_' + Date.now();
     var productName = PRODUCT_NAMES[window._zzCurrentHandle] || window._zzCurrentHandle;
 
-    IMP.init('imp64814445');
-    IMP.request_pay({
-      channel_key: 'channel-key-7d8b9205-eedc-4fa5-9dbf-6634c7003d85',
-      pay_method: 'card',
-      merchant_uid: merchantUid,
-      name: productName,
-      amount: 24500,
-      buyer_name: name,
-      buyer_tel: tel,
-      buyer_email: email || 'noreply@zzing.co.kr',
-      m_redirect_url: window.location.href
-    }, function(rsp) {
-      closePayModal();
-      if (rsp.success) {
-        alert('✅ 결제가 완료되었습니다!\n주문번호: ' + rsp.merchant_uid + '\n결제금액: ₩21,000');
-      } else {
-        alert('❌ 결제 실패\n' + rsp.error_msg);
+    PortOne.requestPayment({
+      storeId: 'store-a2e8715e-fe49-4cc3-8e28-b0d7a3f0ebc0',
+      channelKey: 'channel-key-7d8b9205-eedc-4fa5-9dbf-6634c7003d85',
+      paymentId: merchantUid,
+      orderName: productName,
+      totalAmount: 24500,
+      currency: 'KRW',
+      payMethod: 'CARD',
+      customer: {
+        fullName: name,
+        phoneNumber: tel,
+        email: email || 'noreply@zzing.co.kr'
       }
+    }).then(function(resp) {
+      closePayModal();
+      if (resp && resp.code) {
+        alert('❌ 결제 실패\n' + resp.message);
+      } else {
+        alert('✅ 결제 완료!\n주문번호: ' + merchantUid + '\n결제금액: ₩24,500');
+      }
+    }).catch(function(err) {
+      closePayModal();
+      alert('❌ 결제 오류\n' + (err.message || err));
     });
   });
 
