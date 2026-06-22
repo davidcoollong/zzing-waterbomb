@@ -492,7 +492,8 @@ window.__portoneRequestPayment = requestPayment;
     if (!name) { alert('주문자 이름을 입력해 주세요.'); return; }
     if (!tel)  { alert('전화번호를 입력해 주세요.'); return; }
 
-    var merchantUid = 'zzing_' + Date.now();
+    var refCode = ref || 'direct';
+    var merchantUid = 'zzing_' + refCode + '_' + Date.now();
     var productName = PRODUCT_NAMES[window._zzCurrentHandle] || window._zzCurrentHandle;
 
     var pay = window.__portoneRequestPayment;
@@ -515,6 +516,24 @@ window.__portoneRequestPayment = requestPayment;
       if (resp && resp.code) {
         alert('❌ 결제 실패\n' + resp.message);
       } else {
+        /* KV에 주문 저장 */
+        if (window.ZZ_API) {
+          fetch(window.ZZ_API + '/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              paymentId: merchantUid,
+              ref: refCode,
+              product: window._zzCurrentHandle,
+              productName: productName,
+              amount: 24500,
+              buyerName: name,
+              buyerTel: tel,
+              buyerEmail: email || '',
+              paidAt: new Date().toISOString()
+            })
+          }).catch(function(){});
+        }
         alert('✅ 결제 완료!\n주문번호: ' + merchantUid + '\n결제금액: ₩24,500');
       }
     }).catch(function(err) {
