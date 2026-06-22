@@ -436,23 +436,21 @@
       .catch(function () {});
   }
 
-  /* ── PortOne V1 결제 ── */
-  IMP.init('imp64814445');
-
+  /* ── PortOne V1 결제 (전역 함수) ── */
+  window._zzCurrentHandle = null;
   var PRODUCT_NAMES = {
     'watercool-shotgun': 'WATERBOMB 워터쿨 샷건',
     'watercool-snapgun': 'WATERBOMB 워터쿨 스냅건'
   };
-  var currentHandle = null;
 
-  function openPayModal(handle) {
-    currentHandle = handle;
+  window.openPayModal = function(handle) {
+    window._zzCurrentHandle = handle;
     document.getElementById('pay-prod-name').textContent = PRODUCT_NAMES[handle] || handle;
     document.getElementById('pay-modal-overlay').classList.add('open');
-    document.getElementById('pay-buyer-name').focus();
-  }
+    setTimeout(function(){ document.getElementById('pay-buyer-name').focus(); }, 100);
+  };
 
-  function closePayModal() {
+  window.closePayModal = function() {
     document.getElementById('pay-modal-overlay').classList.remove('open');
     document.getElementById('pay-buyer-name').value = '';
     document.getElementById('pay-buyer-tel').value = '';
@@ -471,8 +469,9 @@
     if (!tel)  { alert('전화번호를 입력해 주세요.'); return; }
 
     var merchantUid = 'zzing_' + Date.now();
-    var productName = PRODUCT_NAMES[currentHandle] || currentHandle;
+    var productName = PRODUCT_NAMES[window._zzCurrentHandle] || window._zzCurrentHandle;
 
+    IMP.init('imp64814445');
     IMP.request_pay({
       pg: 'html5_inicis.INIpayTest',
       pay_method: 'card',
