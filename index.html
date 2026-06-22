@@ -9,6 +9,7 @@
 <meta property="og:description" content="선착순 한정판매 · 워터건 구매 시 고글 + 방수백 무상증정" />
 <meta property="og:image" content="img/shotgun_main.jpeg" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <style>
   :root {
     --green: #2ECC1E; --green-deep: #1a9a10; --pink: #FF2C86; --pink-deep: #d61a6b;
@@ -182,6 +183,45 @@
   .feat-item .d { font-size: 14px; color: #bbb; line-height: 1.7; margin-top: 6px; }
 
   footer { background: #111; color: #aaa; text-align: center; font-size: 12px; line-height: 1.8; padding: 26px 16px; }
+
+  /* ── 결제 모달 ── */
+  #pay-modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9000;
+    background: rgba(0,0,0,.6); align-items: center; justify-content: center;
+  }
+  #pay-modal-overlay.open { display: flex; }
+  #pay-modal {
+    background: #fff; border-radius: 20px; padding: 28px 24px 24px;
+    width: 92%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    font-family: "Pretendard", sans-serif;
+  }
+  #pay-modal h3 { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+  #pay-modal .pay-prod { font-size: 14px; color: #888; margin-bottom: 18px; }
+  #pay-modal label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 5px; color: #333; }
+  #pay-modal input {
+    width: 100%; border: 2px solid #ddd; border-radius: 10px; padding: 12px 14px;
+    font-size: 16px; font-family: "Pretendard", sans-serif; margin-bottom: 14px;
+    outline: none; transition: border .2s;
+  }
+  #pay-modal input:focus { border-color: var(--green); }
+  #pay-modal .pay-amount {
+    background: #f8f8f8; border-radius: 12px; padding: 14px 16px;
+    margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;
+  }
+  #pay-modal .pay-amount span { font-size: 13px; color: #666; }
+  #pay-modal .pay-amount b { font-size: 20px; font-weight: 900; color: var(--red); }
+  #pay-modal .btn-pay {
+    display: block; width: 100%; background: var(--green); color: #fff;
+    border: none; border-radius: 14px; padding: 16px; font-size: 18px;
+    font-weight: 900; font-family: "Pretendard", sans-serif; cursor: pointer;
+    box-shadow: 0 5px 18px rgba(46,204,30,.4); transition: opacity .15s;
+  }
+  #pay-modal .btn-pay:active { opacity: .85; }
+  #pay-modal .btn-cancel {
+    display: block; width: 100%; background: none; border: none;
+    font-size: 14px; color: #aaa; margin-top: 12px; cursor: pointer; font-family: "Pretendard", sans-serif;
+  }
+  #pay-modal .pay-note { font-size: 12px; color: #aaa; text-align: center; margin-top: 8px; line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -396,6 +436,63 @@
       .catch(function () {});
   }
 
+  /* ── PortOne V1 결제 ── */
+  IMP.init('imp64814445');
+
+  var PRODUCT_NAMES = {
+    'watercool-shotgun': 'WATERBOMB 워터쿨 샷건',
+    'watercool-snapgun': 'WATERBOMB 워터쿨 스냅건'
+  };
+  var currentHandle = null;
+
+  function openPayModal(handle) {
+    currentHandle = handle;
+    document.getElementById('pay-prod-name').textContent = PRODUCT_NAMES[handle] || handle;
+    document.getElementById('pay-modal-overlay').classList.add('open');
+    document.getElementById('pay-buyer-name').focus();
+  }
+
+  function closePayModal() {
+    document.getElementById('pay-modal-overlay').classList.remove('open');
+    document.getElementById('pay-buyer-name').value = '';
+    document.getElementById('pay-buyer-tel').value = '';
+    document.getElementById('pay-buyer-email').value = '';
+  }
+
+  document.getElementById('pay-modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closePayModal();
+  });
+
+  document.getElementById('btn-do-pay').addEventListener('click', function() {
+    var name = document.getElementById('pay-buyer-name').value.trim();
+    var tel  = document.getElementById('pay-buyer-tel').value.trim();
+    var email = document.getElementById('pay-buyer-email').value.trim();
+    if (!name) { alert('주문자 이름을 입력해 주세요.'); return; }
+    if (!tel)  { alert('전화번호를 입력해 주세요.'); return; }
+
+    var merchantUid = 'zzing_' + Date.now();
+    var productName = PRODUCT_NAMES[currentHandle] || currentHandle;
+
+    IMP.request_pay({
+      pg: 'html5_inicis.INIpayTest',
+      pay_method: 'card',
+      merchant_uid: merchantUid,
+      name: productName,
+      amount: 24500,
+      buyer_name: name,
+      buyer_tel: tel,
+      buyer_email: email || 'noreply@zzing.co.kr',
+      m_redirect_url: window.location.href
+    }, function(rsp) {
+      closePayModal();
+      if (rsp.success) {
+        alert('✅ 결제가 완료되었습니다!\n주문번호: ' + rsp.merchant_uid + '\n결제금액: ₩21,000');
+      } else {
+        alert('❌ 결제 실패\n' + rsp.error_msg);
+      }
+    });
+  });
+
   /* ── 구매 버튼: 장바구니 추가 후 바로 결제창 직행 ── */
   var store = window.ZZ_STORE || "https://zzinglebell.com";
   var VARIANTS = {
@@ -408,38 +505,32 @@
     a.addEventListener("click", function (e) {
       e.preventDefault();
       var handle = a.dataset.handle;
-      var variantId = VARIANTS[handle];
-      if (!variantId) return;
-
-      var btn = a;
-      btn.textContent = "처리 중...";
-      btn.style.opacity = "0.7";
-      btn.style.pointerEvents = "none";
-
-      fetch(store + "/cart/add.js", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: variantId, quantity: 1 })
-      })
-      .then(function () {
-        var params = new URLSearchParams({
-          utm_source: "influencer", utm_medium: "social",
-          utm_campaign: ref || "direct", utm_content: handle, ref: ref || ""
-        }).toString();
-        window.location.href = store + "/checkout?" + params;
-      })
-      .catch(function () {
-        /* CORS 차단 시 직접 cart URL로 이동 */
-        var params = new URLSearchParams({
-          utm_source: "influencer", utm_medium: "social",
-          utm_campaign: ref || "direct", utm_content: handle, ref: ref || ""
-        }).toString();
-        window.location.href = store + "/cart/" + variantId + ":1?" + params;
-      });
+      if (!VARIANTS[handle]) return;
+      openPayModal(handle);
     });
   });
 })();
 </script>
+
+<!-- 결제 모달 -->
+<div id="pay-modal-overlay">
+  <div id="pay-modal">
+    <h3>주문자 정보 입력</h3>
+    <div class="pay-prod" id="pay-prod-name"></div>
+    <label>이름 *</label>
+    <input id="pay-buyer-name" type="text" placeholder="홍길동" autocomplete="name" />
+    <label>전화번호 *</label>
+    <input id="pay-buyer-tel" type="tel" placeholder="010-1234-5678" autocomplete="tel" />
+    <label>이메일 (선택)</label>
+    <input id="pay-buyer-email" type="email" placeholder="example@email.com" autocomplete="email" />
+    <div class="pay-amount">
+      <span>결제금액 (배송비 포함)</span>
+      <b>₩24,500</b>
+    </div>
+    <button class="btn-pay" id="btn-do-pay">💳 카드 결제하기</button>
+    <button class="btn-cancel" onclick="closePayModal()">취소</button>
+    <p class="pay-note">KG이니시스 · 안전결제 · SSL 암호화</p>
+  </div>
+</div>
 </body>
 </html>
