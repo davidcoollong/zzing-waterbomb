@@ -410,6 +410,27 @@
   </div>
 </footer>
 
+<!-- 결제 모달 -->
+<div id="pay-modal-overlay">
+  <div id="pay-modal">
+    <h3>주문자 정보 입력</h3>
+    <div class="pay-prod" id="pay-prod-name"></div>
+    <label>이름 *</label>
+    <input id="pay-buyer-name" type="text" placeholder="홍길동" autocomplete="name" />
+    <label>전화번호 *</label>
+    <input id="pay-buyer-tel" type="tel" placeholder="010-1234-5678" autocomplete="tel" />
+    <label>이메일 (선택)</label>
+    <input id="pay-buyer-email" type="email" placeholder="example@email.com" autocomplete="email" />
+    <div class="pay-amount">
+      <span>결제금액 (배송비 포함)</span>
+      <b>₩24,500</b>
+    </div>
+    <button class="btn-pay" id="btn-do-pay">💳 카드 결제하기</button>
+    <button class="btn-cancel" onclick="closePayModal()">취소</button>
+    <p class="pay-note">KG이니시스 · 안전결제 · SSL 암호화</p>
+  </div>
+</div>
+
 <script src="influencers.js"></script>
 <script>
 (function () {
@@ -510,26 +531,5 @@
   });
 })();
 </script>
-
-<!-- 결제 모달 -->
-<div id="pay-modal-overlay">
-  <div id="pay-modal">
-    <h3>주문자 정보 입력</h3>
-    <div class="pay-prod" id="pay-prod-name"></div>
-    <label>이름 *</label>
-    <input id="pay-buyer-name" type="text" placeholder="홍길동" autocomplete="name" />
-    <label>전화번호 *</label>
-    <input id="pay-buyer-tel" type="tel" placeholder="010-1234-5678" autocomplete="tel" />
-    <label>이메일 (선택)</label>
-    <input id="pay-buyer-email" type="email" placeholder="example@email.com" autocomplete="email" />
-    <div class="pay-amount">
-      <span>결제금액 (배송비 포함)</span>
-      <b>₩24,500</b>
-    </div>
-    <button class="btn-pay" id="btn-do-pay">💳 카드 결제하기</button>
-    <button class="btn-cancel" onclick="closePayModal()">취소</button>
-    <p class="pay-note">KG이니시스 · 안전결제 · SSL 암호화</p>
-  </div>
-</div>
 </body>
 </html>
