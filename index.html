@@ -9,6 +9,10 @@
 <meta property="og:description" content="선착순 한정판매 · 워터건 구매 시 고글 + 방수백 무상증정" />
 <meta property="og:image" content="img/shotgun_main.jpeg" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script type="module">
+import * as PortOneSdk from 'https://cdn.portone.io/v2/browser-sdk.es6-esm.min.js';
+window.__PortOne = PortOneSdk;
+</script>
 <style>
   :root {
     --green: #2ECC1E; --green-deep: #1a9a10; --pink: #FF2C86; --pink-deep: #d61a6b;
@@ -491,21 +495,21 @@
     var merchantUid = 'zzing_' + Date.now();
     var productName = PRODUCT_NAMES[window._zzCurrentHandle] || window._zzCurrentHandle;
 
-    import('https://cdn.portone.io/v2/browser-sdk.es6-esm.min.js').then(function(sdk) {
-      return sdk.requestPayment({
-        storeId: 'store-a2e8715e-fe49-4cc3-8e28-b0d7a3f0ebc0',
-        channelKey: 'channel-key-7d8b9205-eedc-4fa5-9dbf-6634c7003d85',
-        paymentId: merchantUid,
-        orderName: productName,
-        totalAmount: 24500,
-        currency: 'KRW',
-        payMethod: 'CARD',
-        customer: {
-          fullName: name,
-          phoneNumber: tel,
-          email: email || 'noreply@zzing.co.kr'
-        }
-      });
+    var sdk = window.__PortOne;
+    if (!sdk) { alert('결제 모듈 로딩 중입니다. 잠시 후 다시 시도해주세요.'); return; }
+    sdk.requestPayment({
+      storeId: 'store-a2e8715e-fe49-4cc3-8e28-b0d7a3f0ebc0',
+      channelKey: 'channel-key-7d8b9205-eedc-4fa5-9dbf-6634c7003d85',
+      paymentId: merchantUid,
+      orderName: productName,
+      totalAmount: 24500,
+      currency: 'KRW',
+      payMethod: 'CARD',
+      customer: {
+        fullName: name,
+        phoneNumber: tel,
+        email: email || 'noreply@zzing.co.kr'
+      }
     }).then(function(resp) {
       closePayModal();
       if (resp && resp.code) {
