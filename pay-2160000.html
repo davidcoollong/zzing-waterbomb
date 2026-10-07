@@ -47,22 +47,16 @@ body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; background
     <label>연락처</label>
     <input type="tel" id="buyer-tel" placeholder="010-0000-0000" />
   </div>
-  <div class="form-group">
-    <label>이메일</label>
-    <input type="email" id="buyer-email" placeholder="example@email.com" />
-  </div>
   <button class="btn" onclick="pay()">💳 카드결제 ₩2,160,000</button>
   <div class="notice">KG이니시스 · 신용/체크카드 결제<br>결제 완료 후 확인 문자가 발송됩니다.</div>
 </div>
 
 <script>
 function pay() {
-  var name = document.getElementById('buyer-name').value.trim();
-  var tel = document.getElementById('buyer-tel').value.trim();
-  var email = document.getElementById('buyer-email').value.trim();
+  var name  = document.getElementById('buyer-name').value.trim();
+  var tel   = document.getElementById('buyer-tel').value.trim();
   if (!name) { alert('이름을 입력해주세요.'); return; }
-  if (!tel) { alert('연락처를 입력해주세요.'); return; }
-  if (!email) { alert('이메일을 입력해주세요.'); return; }
+  if (!tel)  { alert('연락처를 입력해주세요.'); return; }
 
   var fn = window.__portoneRequestPayment;
   if (!fn) { alert('결제 모듈 로딩 중입니다. 잠시 후 다시 시도해주세요.'); return; }
@@ -76,15 +70,19 @@ function pay() {
     totalAmount: 2160000,
     currency: 'KRW',
     payMethod: 'CARD',
-    customer: { fullName: name, phoneNumber: tel, email: email }
-  }).then(function(result) {
-    if (result && result.code) {
-      alert('결제 실패: ' + (result.message || result.code));
-    } else {
-      alert('✅ 결제 완료!\n주문번호: ' + paymentId);
+    customer: {
+      fullName: name,
+      phoneNumber: tel,
+      email: 'noreply@zzing.co.kr'
     }
-  }).catch(function(e) {
-    alert('오류: ' + (e && e.message ? e.message : '다시 시도해주세요.'));
+  }).then(function(resp) {
+    if (resp && resp.code) {
+      alert('❌ 결제 실패\n' + resp.message);
+    } else {
+      alert('✅ 결제 완료!\n주문번호: ' + paymentId + '\n결제금액: ₩2,160,000');
+    }
+  }).catch(function(err) {
+    alert('❌ 결제 오류\n' + (err && err.message ? err.message : String(err)));
   });
 }
 </script>
