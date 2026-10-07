@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ZZING 결제</title>
+<script type="module">
+import { requestPayment } from 'https://esm.sh/@portone/browser-sdk@0.0.8';
+window.__portoneRequestPayment = requestPayment;
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; background: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.card { background: #fff; border-radius: 16px; padding: 32px 24px; max-width: 420px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,.1); }
+.logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; color: #111; margin-bottom: 24px; }
+.order-info { background: #f9f9f9; border-radius: 10px; padding: 16px; margin-bottom: 24px; }
+.order-info .label { font-size: 12px; color: #888; margin-bottom: 4px; }
+.order-info .product { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 12px; }
+.order-info .amount-row { display: flex; justify-content: space-between; align-items: center; }
+.order-info .amount-label { font-size: 14px; color: #555; }
+.order-info .amount { font-size: 26px; font-weight: 900; color: #e00; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
+.form-group input { width: 100%; border: 1.5px solid #ddd; border-radius: 8px; padding: 12px 14px; font-size: 15px; outline: none; transition: border-color .2s; }
+.form-group input:focus { border-color: #111; }
+.btn { width: 100%; background: #111; color: #fff; border: none; border-radius: 12px; padding: 16px; font-size: 17px; font-weight: 900; cursor: pointer; letter-spacing: -0.3px; margin-top: 8px; }
+.btn:active { opacity: .85; }
+.notice { font-size: 12px; color: #aaa; text-align: center; margin-top: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">ZZING</div>
+  <div class="order-info">
+    <div class="label">주문 상품</div>
+    <div class="product">봉제인형 기성품(해피월드) × 144개</div>
+    <div class="amount-row">
+      <div class="amount-label">결제금액</div>
+      <div class="amount">₩2,160,000</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>이름</label>
+    <input type="text" id="buyer-name" placeholder="홍길동" />
+  </div>
+  <div class="form-group">
+    <label>연락처</label>
+    <input type="tel" id="buyer-tel" placeholder="010-0000-0000" />
+  </div>
+  <button class="btn" onclick="pay()">💳 카드결제 ₩2,160,000</button>
+  <div class="notice">KG이니시스 · 신용/체크카드 결제<br>결제 완료 후 확인 문자가 발송됩니다.</div>
+</div>
+
+<script>
+function pay() {
+  var name = document.getElementById('buyer-name').value.trim();
+  var tel = document.getElementById('buyer-tel').value.trim();
+  if (!name) { alert('이름을 입력해주세요.'); return; }
+  if (!tel) { alert('연락처를 입력해주세요.'); return; }
+
+  var fn = window.__portoneRequestPayment;
+  if (!fn) { alert('결제 모듈 로딩 중입니다. 잠시 후 다시 시도해주세요.'); return; }
+
+  var paymentId = 'zzing_bulk_' + Date.now();
+  fn({
+    storeId: 'store-fd4bf083-58af-4e1c-887a-1a28c87a4ded',
+    channelKey: 'channel-key-2fe2c182-4bab-4948-a62b-226fe6031f45',
+    paymentId: paymentId,
+    orderName: '봉제인형 기성품(해피월드) x144',
+    totalAmount: 2160000,
+    currency: 'KRW',
+    payMethod: 'CARD',
+    customer: { fullName: name, phoneNumber: tel }
+  }).then(function(result) {
+    if (result && result.code) {
+      alert('결제 실패: ' + (result.message || result.code));
+    } else {
+      alert('✅ 결제 완료!\n주문번호: ' + paymentId);
+    }
+  }).catch(function(e) {
+    alert('오류: ' + (e && e.message ? e.message : '다시 시도해주세요.'));
+  });
+}
+</script>
+</body>
+</html>
